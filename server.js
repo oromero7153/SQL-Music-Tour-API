@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const { Sequelize } = require('sequelize')
 
-
 // CONFIGURATION / MIDDLEWARE
 require('dotenv').config()
 app.use(express.json())
@@ -17,13 +16,13 @@ const sequelize = new Sequelize({
     password: 'Moc#1907'
   })
   
+
 try {
-    sequelize.authenticate()
-    console.log('connected with sequqlize at ${process.env.PG_URI}')
-} catch(err){
-    console.log('Unable to connect to PG: ${err}')
+    sequelize.authenticate() 
+    console.log(`Connected with Sequelize at ${process.env.PG_URI}`) 
+} catch(err) {
+    console.log(`Unable to connect to PG: ${err}`) 
 }
-  
 
 // ROOT
 app.get('/', (req, res) => {
