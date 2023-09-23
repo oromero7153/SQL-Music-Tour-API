@@ -14,9 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   stage.init({
-    stage_id: DataTypes.INTEGER,
-    stage_name: DataTypes.STRING
-  }, {
+    stage_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    stage_name: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+   },
+    {
     sequelize,
     modelName: 'stage',
   });

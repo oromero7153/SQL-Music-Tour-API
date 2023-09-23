@@ -10,13 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       stage_events_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       stage_id: {
-        type: Sequelize.SMALLINT
+        type: Sequelize.SMALLINT,
+        allowNull: false
       },
       event_id: {
-        type: Sequelize.SMALLINT
+        type: Sequelize.SMALLINT,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
