@@ -11,7 +11,7 @@ events.get('/', async (req, res) => {
     } catch (error) {
         res.status(500).json(error)
     }
-})
+});
 
 //FIND A SPECIFIC EVENT
 events.get('/:id', async (req, res)=>{
@@ -23,7 +23,20 @@ events.get('/:id', async (req, res)=>{
     } catch (error){
         res.status(500).json(error)
     }
-})
+});
+
+// CREATE AN EVENT
+events.post('/', async (req, res) => {
+    try{
+        const newEvent = await Event.create(req.body)
+        res.status(200).json({
+            message : 'Successfully inserted a new band', 
+            data: newEvent
+        })
+    } catch (err) {
+        res.status(500).json(err)
+    }
+});
 
 //export
 module.exports = events
