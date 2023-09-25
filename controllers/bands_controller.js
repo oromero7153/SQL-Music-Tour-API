@@ -18,7 +18,7 @@ bands.get('/', async (req, res)=> {
     } catch (error) {
         rest.status(500).json(error)
     }
-})
+});
 // Find specific band
 //http://localhost:3000/bands/2
 bands.get('/:id', async (req, res) => {
@@ -30,7 +30,7 @@ bands.get('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json(error)
     }
-})
+});
 // CREATE A BAND
 //POST http://localhost:300/bands
 bands.post('/', async (req, res) => {
@@ -43,7 +43,7 @@ bands.post('/', async (req, res) => {
     } catch(err) {
         res.status(500).json(err)
     }
-})
+});
 // UPDATE A BAND
 //PUT http://localhost:300/bands/1
 bands.put('/:id', async (req, res) => {
@@ -59,7 +59,7 @@ bands.put('/:id', async (req, res) => {
     } catch(err) {
         res.status(500).json(err)
     }
-})
+});
 
 // DELETE A BAND
 //delete http://localhost:3000/bands/1
@@ -76,7 +76,7 @@ bands.delete('/:id', async (req, res) => {
     } catch(err) {
         res.status(500).json(err)
     }
-})
+});
 
 
 //export
