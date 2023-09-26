@@ -1,7 +1,7 @@
 // DEPENDENCIES
 const stages = require('express').Router()
 const db = require('../models')
-const { Stage, Event, MeetGreet, SetTime, Band } = db 
+const { Stage, Event } = db
 const { Op } = require('sequelize')
 
 // FIND ALL STAGES
@@ -22,27 +22,11 @@ stages.get('/', async (req, res) => {
 stages.get('/:name', async (req, res) => {
     try {
         const foundStage = await Stage.findOne({
-            where: { name: req.params.name },
-            include: [ 
+            where: { stage_name: req.params.name },
+            include: [
                 {
-                    model: MeetGreet, 
-                    as: 'meet_greets',
-                    include: {
-                        model: Band, 
-                        as: "band",
-                    }
-                },
-                {
-                    model: SetTime, 
-                    as: "set_times",
-                    include: [
-                        {model : Band, as: "band"},
-                        {model: Stage, as: "stage"}
-                    ]
-                },
-                {
-                    model: Event, 
-                    as: "event"
+                    model: Event,
+                    as: "events"
                 },
             ]
         })
@@ -60,7 +44,7 @@ stages.post('/', async (req, res) => {
             message: 'Successfully inserted a new stage',
             data: newStage
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -76,7 +60,7 @@ stages.put('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully updated ${updatedStages} stage(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -92,7 +76,7 @@ stages.delete('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully deleted ${deletedStages} stage(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })

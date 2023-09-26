@@ -1,14 +1,14 @@
 // DEPENDENCIES
 const events = require('express').Router()
 const db = require('../models')
-const { Event, MeetGreet, SetTime, Stage, Band } = db 
+const { Event, MeetGreet, SetTime, Stage, Band } = db
 const { Op } = require('sequelize')
 
 // FIND ALL EVENTS
 events.get('/', async (req, res) => {
     try {
         const foundEvents = await Event.findAll({
-            order: [ [ 'date', 'ASC' ] ],
+            order: [['date', 'ASC']],
             where: {
                 name: { [Op.like]: `%${req.query.name ? req.query.name : ''}%` }
             }
@@ -23,26 +23,26 @@ events.get('/', async (req, res) => {
 events.get('/:name', async (req, res) => {
     try {
         const foundEvent = await Event.findOne({
-            where: { name: req.params.name }, 
+            where: { event_name: req.params.name },
             include: [
                 {
-                    model: MeetGreet, 
-                    as:"meet_greets", 
-                    include:{
-                        model: Band, 
+                    model: MeetGreet,
+                    as: "meet_greets",
+                    include: {
+                        model: Band,
                         as: "band",
                     }
                 },
                 {
-                    model: SetTime, 
-                    as: "set_times", 
-                    include:[
-                        {model: Band, as: "band"},
-                        {model: Stage, as: "stage"}
+                    model: SetTime,
+                    as: "set_times",
+                    include: [
+                        { model: Band, as: "band" },
+                        { model: Stage, as: "stage" }
                     ]
                 },
                 {
-                    model: Stage, 
+                    model: Stage,
                     as: "stages",
                 }
             ]
@@ -61,7 +61,7 @@ events.post('/', async (req, res) => {
             message: 'Successfully inserted a new event',
             data: newEvent
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -77,7 +77,7 @@ events.put('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully updated ${updatedEvents} event(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -93,7 +93,7 @@ events.delete('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully deleted ${deletedEvents} event(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
