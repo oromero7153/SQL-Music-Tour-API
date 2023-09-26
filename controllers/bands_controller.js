@@ -1,26 +1,25 @@
-//dependencies
+// DEPENDENCIES
 const bands = require('express').Router()
 const db = require('../models')
-const { Band } = db
+const { Band } = db 
 const { Op } = require('sequelize')
 
-//Find all bands
-// GET http://localhost:300/bands
+// FIND ALL BANDS
 bands.get('/', async (req, res) => {
     try {
         const foundBands = await Band.findAll({
-            order: [['available_start_time', 'ASC']],
+            order: [ [ 'available_start_time', 'ASC' ] ],
             where: {
                 name: { [Op.like]: `%${req.query.name ? req.query.name : ''}%` }
             }
         })
         res.status(200).json(foundBands)
     } catch (error) {
-        rest.status(500).json(error)
+        res.status(500).json(error)
     }
-});
-// Find specific band
-//http://localhost:3000/bands/2
+})
+
+// FIND A SPECIFIC BAND
 bands.get('/:id', async (req, res) => {
     try {
         const foundBand = await Band.findOne({
@@ -30,9 +29,9 @@ bands.get('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json(error)
     }
-});
+})
+
 // CREATE A BAND
-//POST http://localhost:300/bands
 bands.post('/', async (req, res) => {
     try {
         const newBand = await Band.create(req.body)
@@ -40,12 +39,12 @@ bands.post('/', async (req, res) => {
             message: 'Successfully inserted a new band',
             data: newBand
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
-});
+})
+
 // UPDATE A BAND
-//PUT http://localhost:300/bands/1
 bands.put('/:id', async (req, res) => {
     try {
         const updatedBands = await Band.update(req.body, {
@@ -56,13 +55,12 @@ bands.put('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully updated ${updatedBands} band(s)`
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
-});
+})
 
 // DELETE A BAND
-//delete http://localhost:3000/bands/1
 bands.delete('/:id', async (req, res) => {
     try {
         const deletedBands = await Band.destroy({
@@ -73,11 +71,10 @@ bands.delete('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully deleted ${deletedBands} band(s)`
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
-});
+})
 
-
-//export
+// EXPORT
 module.exports = bands
