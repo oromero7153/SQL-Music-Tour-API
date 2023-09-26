@@ -1,14 +1,14 @@
 // DEPENDENCIES
 const bands = require('express').Router()
 const db = require('../models')
-const { Band } = db 
+const { Band, MeetGreet, Event, SetTime } = db
 const { Op } = require('sequelize')
 
 // FIND ALL BANDS
 bands.get('/', async (req, res) => {
     try {
         const foundBands = await Band.findAll({
-            order: [ [ 'available_start_time', 'ASC' ] ],
+            order: [['available_start_time', 'ASC']],
             where: {
                 name: { [Op.like]: `%${req.query.name ? req.query.name : ''}%` }
             }
@@ -20,10 +20,29 @@ bands.get('/', async (req, res) => {
 })
 
 // FIND A SPECIFIC BAND
-bands.get('/:id', async (req, res) => {
+bands.get('/:name', async (req, res) => {
     try {
         const foundBand = await Band.findOne({
-            where: { band_id: req.params.id }
+            where: { name: req.params.name },
+            include: [
+                {
+                    model: MeetGreet,
+                    as: "meet_greets",
+                    include: { model: Event, 
+                        as: "event",
+                        where: { name: { [Op.like]: `%${req.query.event ? req.query.event : ''}%` } }
+                     }
+                },
+                {
+                    model: SetTime,
+                    as: "set_times",
+                    include: {
+                        model: Event,
+                        as: "event",
+                        where: { name: { [Op.like]: `%${req.query.event ? req.query.event : ''}%` } }
+                    }
+                }
+            ]
         })
         res.status(200).json(foundBand)
     } catch (error) {
@@ -31,18 +50,6 @@ bands.get('/:id', async (req, res) => {
     }
 })
 
-// CREATE A BAND
-bands.post('/', async (req, res) => {
-    try {
-        const newBand = await Band.create(req.body)
-        res.status(200).json({
-            message: 'Successfully inserted a new band',
-            data: newBand
-        })
-    } catch(err) {
-        res.status(500).json(err)
-    }
-})
 
 // UPDATE A BAND
 bands.put('/:id', async (req, res) => {
@@ -55,7 +62,7 @@ bands.put('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully updated ${updatedBands} band(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
@@ -71,7 +78,7 @@ bands.delete('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully deleted ${deletedBands} band(s)`
         })
-    } catch(err) {
+    } catch (err) {
         res.status(500).json(err)
     }
 })
